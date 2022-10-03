@@ -8,8 +8,19 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 from .models import User
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 
 class Register(APIView):
@@ -17,22 +28,20 @@ class Register(APIView):
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class Login(APIView):
     permission_classes = [AllowAny,]
-
     queryset = User.objects.all()
     serializer = UserSerializer
 
     def post(self, request):
-        serializer_class = UserSerializer(data=request.data)
-        if serializer_class.is_valid(raise_exception=True):
-            return Response(serializer_class.data, status=HTTP_200_OK)
-        return Response(serializer_class.errors, status=HTTP_400_BAD_REQUEST)
+        pass
+
 
 class Userview(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication,]
