@@ -1,26 +1,16 @@
 from django.shortcuts import render
 
-from .serializers import UserSerializer
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
-
-from rest_framework_simplejwt.tokens import RefreshToken
-
+from .serializers import UserSerializer, LoginSerializer
 
 from .models import User
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
 
 
 class Register(APIView):
@@ -30,26 +20,29 @@ class Register(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data, status=HTTP_200_OK)
+            return Response({
+                'data' : serializer.data,
+                }, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-class Login(APIView):
-    permission_classes = [AllowAny,]
-    queryset = User.objects.all()
-    serializer = UserSerializer
-
-    def post(self, request):
-        pass
+class Login(TokenObtainPairView):
+    serializer_class = LoginSerializer
 
 
 class Userview(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication,]
     permission_classes = [IsAuthenticated,]
 
     def get(self, request):
-        content = {
-            'user': str(request.user),  # `django.contrib.auth.User` instance.
-            'auth': str(request.auth),  # None
-        }
-        return Response(content)
+        data = UserSerializer(request.user).data
+        return Response(data)
+
+
+class DeleteUserview(APIView):
+    permission_classes = [IsAuthenticated,]
+
+    def delete(self, request):
+        user=self.request.user
+        user.delete()
+
+        return Response({"result":"user delete"})
