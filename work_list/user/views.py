@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
 from .serializers import UserSerializer, LoginSerializer
-
 from .models import User
 
 from rest_framework.views import APIView
@@ -34,6 +33,7 @@ class Userview(APIView):
     permission_classes = [IsAuthenticated,]
 
     def get(self, request):
+        print(request.user)
         data = UserSerializer(request.user).data
         return Response(data)
 

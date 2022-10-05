@@ -1,12 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import User
+from user.models import User
 
 # Create your models here.
 class Work(models.Model):
-    work_id = models.AutoField(primary_key=True, db_index=True)
-    title = models.CharField(max_length=255)
+    work_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True)
     content = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=255, blank=True, null=True)
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now_add=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_update = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User ,on_delete=models.CASCADE, default = '')
