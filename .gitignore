@@ -1,0 +1,4 @@
+libs/
+work_list/work_list/__pycache__
+work_list/user/__pycache__
+work_list/work/__pycache__
