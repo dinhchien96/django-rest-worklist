@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  api:
+    container_name: DjangoRestAPI
+    # command: python manage.py migrate
+    build: ./
+    ports: 
+      - 8000:8000
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    restart: always
+
+
+  db:
+    container_name: mysql_db
+    image: mysql:5.7
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: django_rest_api
+      MYSQL_USER: api
+      MYSQL_PASSWORD: admin
+      MYSQL_PORT: 3306
+    volumes:
+      # - db:/var/lib/mysql
+      - /opt/slack_bot/mysql_data:/var/lib/mysql
+      # - /tmp/slack_bot/mysqld:/var/run/mysqld
+    ports:
+    - 33061:3306
+    restart: always
+
+volumes:
+  db:
