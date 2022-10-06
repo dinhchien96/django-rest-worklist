@@ -2,3 +2,5 @@ libs/
 work_list/work_list/__pycache__
 work_list/user/__pycache__
 work_list/work/__pycache__
+work_list/user/migrations/__pycache__
+work_list/work/migrations/__pycache__
