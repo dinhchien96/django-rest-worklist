@@ -23,7 +23,7 @@ Step 1 - Installation using pip:
     pip install -r requirements.txt
 
 
-Step 2 - Migrations data:
+Step 2 - Migrations database:
 
     python manage.py makemigrations
     python manage.py migrate
