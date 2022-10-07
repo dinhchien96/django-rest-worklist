@@ -20,9 +20,9 @@ Change your settings files in this dir "work_list\work_list\settings.py " like t
 
 ### Run command
 Step 1 - Installation using pip:
-
+    
+    cd work_list
     pip install -r requirements.txt
-
 
 Step 2 - Migrations database:
 
@@ -32,7 +32,6 @@ Step 2 - Migrations database:
 
 Step 3 - Run server:
 
-    cd work_list
     python manage.py runserver #this server will run with port 8000
 
 ## How to run in docker
