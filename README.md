@@ -10,6 +10,7 @@
     django >=4.0.0, <4.1.0
     djangorestframework
     djangorestframework-simplejwt
+    mysqlclient == 2.1.1
 
 ## How to run in local database with sqlite
 
