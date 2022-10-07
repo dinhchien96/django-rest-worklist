@@ -46,6 +46,7 @@ Step 1 - Installation <a href="https://docs.docker.com/desktop/">docker</a> (Rec
 
 Step 2 - Run this command:
     
+    cd work_list
     docker-compose up --build
 
 ## Post-man
